@@ -1,0 +1,59 @@
+### 第一章 引言
+
+#### 1.EJB存在的问题
+
+![1595397660129](C:\Users\97133\AppData\Roaming\Typora\typora-user-images\1595397660129.png)
+
+#### 2.什么是Spring
+
+```
+1.Spring是一个轻量级的JavaEE解决方案，整合众多优秀的设计模式
+```
+
+- 轻量级
+
+  ~~~markdown
+  1. 对于运行环境是没有额外要求的
+     开源 tomcat resion jetty
+     收费 weblogic websphere
+  2. 代码移植性
+     不需要实现额外接口
+  ~~~
+
+- JavaEE的解决方案
+
+![1595398481160](C:\Users\97133\AppData\Roaming\Typora\typora-user-images\1595398481160.png)
+
+- 整合设计模式
+
+```markdown
+1. 工厂
+2. 代理
+3. 模板
+4. 策略
+```
+
+#### 3.设计模式
+
+~~~ markdown
+1. 广义概念
+面向对象设计中，解决特定问题的经典代码
+2. 狭义概念
+GOF4人帮所定义的23种设计模式：工厂、适配器、装饰器、门面、代理、模板...
+~~~
+
+#### 4.工厂模式
+
+##### 4.1 什么是工厂设计模式
+
+~~~markdown
+1. 概念：通过工厂类，创建对象
+2. 好处：解耦合
+   耦合：指的是代码间的强关联关系，一方的改变会影响到另一方
+   问题：不利于代码维护
+   简单理解：把接口的实现类，硬编码再程序中
+   		   UserService userService = new UserServiceImpl();
+~~~
+
+##### 4.2 简单工厂模式
+
