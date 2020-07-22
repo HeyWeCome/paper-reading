@@ -2,7 +2,7 @@
 
 #### 1.EJB存在的问题
 
-![1595397660129](C:\Users\97133\AppData\Roaming\Typora\typora-user-images\1595397660129.png)
+![1595397660129](../pic/1595397660129.png)
 
 #### 2.什么是Spring
 
@@ -22,7 +22,7 @@
 
 - JavaEE的解决方案
 
-![1595398481160](C:\Users\97133\AppData\Roaming\Typora\typora-user-images\1595398481160.png)
+![1595398481160](../pic/1595398481160.png)
 
 - 整合设计模式
 
