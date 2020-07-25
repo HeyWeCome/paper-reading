@@ -269,6 +269,75 @@ Spring的本质：工厂 ApplicationContext 配置文件 applicationContext.xml
     ```markdown
     ApplicationContext工厂的对象占用大量内存
     不会频繁的创建对象： 一个应用只会创建一个工厂对象
-    ```
-
+    ApplicationContext工厂：一定是线程安全的（多线程并发访问）
+```
     
+    
+
+#### 4.程序开发
+
+```markdown
+1. 创建类型
+2. 配置文件的配置 applicationContext.xml
+3. 通过工厂类，获得对象
+   ApplicationContext
+   		Junit中 |- ClassPathXmlApplicationContext
+   ApplicationContext ctx = new ClassPathXmlApplicationContent("applicationContext.xml");
+   Person person = (Person)ctx.getBean("person"); // 键值对的方式来获取
+```
+
+
+
+#### 5.细节分析
+
+- 名词解释
+
+  ```markdown
+  Spring ⼯⼚创建的对象，叫做 bean 或者 组件(componet)；
+  ```
+
+- Spring工厂的一些方法
+
+```java
+// getBean：传入 id值 和 类名 获取对象，不需要强制类型转换。
+// 通过这种⽅式获得对象，就不需要强制类型转换
+Person person = ctx.getBean("person", Person.class);
+System.out.println("person = " + person);
+
+// getBean：只指定类名，Spring 的配置文件中只能有一个 bean 是这个类型。
+// 使用这种方式的话, 当前Spring的配置文件中 只能有一个bean class是Person类型
+Person person = ctx.getBean(Person.class);
+System.out.println("person = " + person);
+
+// getBeanDefinitionNames：获取 Spring 配置文件中所有的 bean 标签的 id 值。
+// 获取的是Spring工厂配置文件中所有bean标签的id值  person person1
+String[] beanDefinitionNames = ctx.getBeanDefinitionNames();
+for (String beanDefinitionName : beanDefinitionNames) {
+	System.out.println("beanDefinitionName = " + beanDefinitionName);
+}
+
+// getBeanNamesForType：根据类型获得 Spring 配置文件中对应的 id 值。
+// 根据类型获得Spring配置文件中对应的id值
+String[] beanNamesForType = ctx.getBeanNamesForType(Person.class);
+for (String id : beanNamesForType) {
+	System.out.println("id = " + id);
+}
+
+// containsBeanDefinition：用于判断是否存在指定 id 值的 bean，不能判断 name 值
+// 用于判断是否存在指定id值的bean,不能判断name值
+if (ctx.containsBeanDefinition("person")) {
+	System.out.println(true);
+} else {
+	System.out.println(false);
+}
+
+// containsBean：用于判断是否存在指定 id 值的 bean，也可以判断 name 值。
+// 用于判断是否存在指定id值的bean,也可以判断name值
+if (ctx.containsBean("p")) {
+	System.out.println(true);
+} else {
+	System.out.println(false);
+}
+
+```
+
