@@ -270,13 +270,15 @@ Spring的本质：工厂 ApplicationContext 配置文件 applicationContext.xml
     ApplicationContext工厂的对象占用大量内存
     不会频繁的创建对象： 一个应用只会创建一个工厂对象
     ApplicationContext工厂：一定是线程安全的（多线程并发访问）
+    ```
 ```
     
-    
+
+
 
 #### 4.程序开发
 
-```markdown
+​```markdown
 1. 创建类型
 2. 配置文件的配置 applicationContext.xml
 3. 通过工厂类，获得对象
@@ -333,11 +335,72 @@ if (ctx.containsBeanDefinition("person")) {
 
 // containsBean：用于判断是否存在指定 id 值的 bean，也可以判断 name 值。
 // 用于判断是否存在指定id值的bean,也可以判断name值
-if (ctx.containsBean("p")) {
+if (ctx.containsBean("person")) {
 	System.out.println(true);
 } else {
 	System.out.println(false);
 }
-
 ```
+
+- 配置文件中需要注意的细节
+
+  ```markdown
+  1. 只配置class属性
+  <bean class="Person">
+a) 上述这种配置 有没有id值？ 答案：有，并且自动生成为Person#0
+  b) 应用场景：如果这个bean只需要使用一次，那么就可以省略id值
+  		   如果这个bean会使用多次，或者被其他 bean 引⽤则需要设置 id 值； 
+  		   
+  2. name属性
+  作⽤：⽤于在 Spring 的配置⽂件中，为 bean 对象定义别名（小名）
+  相同：
+   	1.ctx.getBean("id") 或 ctx.getBean("name") 都可以获取对象；
+      2.<bean id="person" class="Person"/>
+        在定义方面等效于
+        <bean name="person" class="Person"/>；
+  区别：
+  	1. 别名可以定义多个，但是id属性只能有一个值；（别名：<bean name="person,p1,p2"/>）
+  	2. XML的id属性的值，命名要求：必须要以字母开头，可以包含字母、数字、下划线、连字符；不能以特殊字符开头/person；
+  	   name属性的值，命名没有要求，可以设置成 /person的格式；
+  	   name属性会应用在特殊命名的场景下：/person；
+  	   
+  	   XML发展到了今天：ID属性的限制已经不存在，/person也可以。
+  	3. 代码
+  	   containsBeanDefinition不能通过别名name来判断
+  	   containsBean可以通过别名name来判断
+  	   
+  	   // 用于判断是否存在指定id值的bean,不能判断name值
+          if (ctx.containsBeanDefinition("person")) {
+              System.out.println(true);
+          } else {
+              System.out.println(false);
+          }
+          // 用于判断是否存在指定id值的bean,也可以判断name值
+          if (ctx.containsBean("person")) {
+              System.out.println(true);
+          } else {
+              System.out.println(false);
+          }
+  	   
+  ```
+  
+
+
+
+#### 6.Spring工厂的底层实现原理（简易版）
+
+**Spring工厂是可以调用对象私有的构造方法来创建对象，因为底层都是通过反射实现的**
+
+![20200521002624493](../pic/20200521002624493.png)
+
+
+
+#### 7.思考
+
+```markdown
+问题：未来在开发过程中，是不是所有的对象，都会交给 Spring ⼯⼚来创建呢？ 
+回答：理论上是的，但是有特例 ：实体对象(entity) 是不会交给Spring创建，它由持久层框架进⾏创建。
+```
+
+
 

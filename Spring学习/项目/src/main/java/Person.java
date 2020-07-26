@@ -1,5 +1,3 @@
-package PACKAGE_NAME;
-
 /**
  * @description:
  * @author: HeyWeCome
@@ -7,4 +5,8 @@ package PACKAGE_NAME;
  * @version: 1.0
  */
 public class Person {
+    public static void main(String[] args) {
+        String kang = "hwk";
+        System.out.println("kang = " + kang);
+    }
 }
