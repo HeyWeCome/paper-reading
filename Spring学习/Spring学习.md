@@ -404,3 +404,39 @@ a) 上述这种配置 有没有id值？ 答案：有，并且自动生成为Pers
 
 
 
+#### 第三章、Spring5.x与日志框架的整合
+
+```markdown
+Spring与日志框架进行整合，日志框架就可以在控制台中，输出Spring框架运行过程中的一些重要信息。
+好处:便于了解Spring框架的运行过程，利于程序的调试。
+```
+
+- Spring如何整合日志框架
+
+  ```markdown
+  默认
+  	Spring1.2.3早期都是与commons-logging.jar
+  	Spring5.x默认整合的日志框架是 logback或者log4j2
+  
+  Spring5.x整合log4j
+  	1. 引入log4j jar包
+  	2. 引入log4.properties配置文件
+  ```
+
+  - pom
+
+    ```xml
+    // 日志门面，取消spring默认的日志，让Spring来采用log4j
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.7.25</version>
+    </dependency>
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+    </dependency>
+    ```
+
+    
