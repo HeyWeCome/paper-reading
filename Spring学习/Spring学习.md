@@ -404,7 +404,7 @@ a) 上述这种配置 有没有id值？ 答案：有，并且自动生成为Pers
 
 
 
-#### 第三章、Spring5.x与日志框架的整合
+### 第三章、Spring5.x与日志框架的整合
 
 ```markdown
 Spring与日志框架进行整合，日志框架就可以在控制台中，输出Spring框架运行过程中的一些重要信息。
@@ -439,4 +439,41 @@ Spring与日志框架进行整合，日志框架就可以在控制台中，输�
     </dependency>
     ```
 
+  - log4j.properties
+
+    ```markdown
+    # resources 文件夹根目录下
+    ### 配置根
+    log4j.rootLogger = debug,console
     
+    ### 日志输出到控制台显示
+    
+    log4j.appender.console=org.apache.log4j.ConsoleAppender
+    log4j.appender.console.Target=System.out
+    log4j.appender.console.layout=org.apache.log4j.PatternLayout
+    log4j.appender.console.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+    ```
+
+    ![1595856819981](../pic/1595856819981.png)
+
+
+
+### 第四章、注入（injection）
+
+#### 1.什么是注入
+
+```markdown
+通过Spring工厂及配置文件，为所创建对象的成员变量赋值
+```
+
+##### 1.1 为什么需要注入
+
+**通过编码的方式，为成员变量进行赋值，存在耦合**
+
+![1596074770731](../pic/1596074770731.png)
+
+##### 1.2 如何进行注入[开发步骤]
+
+- 类的成员变量提供set get方法；
+- 配置Spring的配置文件；
+- 
