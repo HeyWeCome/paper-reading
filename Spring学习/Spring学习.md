@@ -475,5 +475,140 @@ Spring与日志框架进行整合，日志框架就可以在控制台中，输�
 ##### 1.2 如何进行注入[开发步骤]
 
 - 类的成员变量提供set get方法；
+
 - 配置Spring的配置文件；
-- 
+
+  ```xml
+  <bean id="Person" class="com.Person">
+  	<property name="id">
+          <value>10</value>
+      </property>
+      <property name="name">
+          <value>heywecome</value>
+      </property>
+  </bean>
+  ```
+
+##### 1.3 注入好处
+
+```markdown
+解耦合
+```
+
+#### 2. Spring注入的原理分析(简易版)
+
+```markdown
+<bean>相当于新建一个对象；
+<property>相当于set方法赋值。
+```
+
+**Spring会通过底层调用对象属性对应的set方法，完成成员变量的赋值，这种方法我们也称之为set注入**
+
+![1596179811562](../pic/1596179811562.png)
+
+
+
+### 第五章、set方法详解
+
+**set注入的类型**
+
+![1596180652022](../pic/1596180652022.png)
+
+~~~markdown
+针对于不同类型的成员变量，在<property标签中，需要嵌套其他标签:
+<property>
+...
+</property>
+~~~
+
+
+
+#### 1. JDK内置类型
+
+##### 1.1 String+8种基本类型
+
+~~~markdown
+<value>hwk</value>
+~~~
+
+##### 1.2 数组
+
+~~~markdown
+<list>
+	<value>kangkang</value>
+	<value>heywecome</value>
+	<value>hehe</value>
+</list>
+~~~
+
+##### 1.3 Set集合
+
+~~~xml
+<set>
+	<value>111111</value>
+    <value>132111</value>
+    <value>144111</value>
+</set>
+
+如果set里面没有指定类型，那么里面的value可以存储多个类型的数据
+<set>
+	<ref bean=""></ref>
+    <set></set>
+    <value>313213</value>
+</set>
+~~~
+
+##### 1.4 List集合
+
+~~~xml
+<list>
+	<value>eran</value>
+    <value>nantong</value>
+</list>
+
+<list>
+	<ref bean=""></ref>
+    <set></set>
+    <value>313213</value>
+</list>
+~~~
+
+##### 1.5 Map
+
+~~~xml
+注意： map -- 一个键值对包含在一个entry里面 -- key有特定的标签 <key></key>
+					  					 值根据对应类型选择类型的标签
+<map>
+    <entry>
+        <key><value>kangkang</value></key>
+        <value>21</value>
+    </entry>
+    <entry>
+        <key><value>xiaohe</value></key>
+        <ref bean=""></ref>
+    </entry>
+</map>
+~~~
+
+##### 1.6 Properties
+
+~~~markdown
+Properties类型，它是一个特殊的Map，它的Key是String类型，value也是String类型的。
+每一个pro都是一个键值对
+~~~
+
+~~~xml
+<pros>
+	<pro key="key1">value1</pro>
+    <pro key="key2">value2</pro>
+</pros>
+~~~
+
+##### 1.7 复杂的JDK类型(Date)
+
+~~~markdown
+需要程序员自定义类型转化器处理。
+~~~
+
+#### 2. 用户自定义类型
+
