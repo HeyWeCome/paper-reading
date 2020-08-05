@@ -611,3 +611,97 @@ Properties类型，它是一个特殊的Map，它的Key是String类型，value�
 ~~~
 
 #### 2. 用户自定义类型
+
+##### 2.1 第一种方式
+
+- 为成员变量提供set get方法
+
+- 配置文件中进行注入(赋值)
+
+  ~~~xml
+  <bean id="userService" class="xxx.UserServiceImpl">
+  	<property name="userDao">
+      	<bean class="xxx.UserDaoImpl"></bean>
+      </property>
+  </bean>
+  ~~~
+
+##### 2.2 第二种方式
+
+- 第一种方式存在的问题
+
+  ~~~markdown
+  1. 配置文件代码冗余
+  2. 被注入的对象(UserDao)，多次创建，浪费(JVM)内存资源
+  ~~~
+
+- 为成员变量提供set get方法
+
+- 配置文件中进行配置
+
+  ~~~xml
+  <bean id="userDAO" class="xxx.UserDAOImpl">
+  </bean>
+  
+  <bean id="userService" class="xxx.UserServiceImpl">
+      <!-- property中的name为UserServiceImpl中的成员变量名 -->
+  	<property name="userDAO">
+          <!-- ref的userDao则是上面定义的bean -->
+      	<ref bean="userDAO"/>
+      </property>
+  </bean>
+  
+  # Spring4.x废除了 <ref local=""/> 基本等效于 <ref bean=""/>
+  ~~~
+
+  
+
+#### 3. Set注入的简化写法
+
+##### 3.1 基于属性简化
+
+~~~xml
+JDK类型注入
+<property name="name">
+	<value>kangkang</value>
+</property>
+
+简化之后
+<property name="name" value="kangkang"></property>
+注意：
+	value属性 只能简化 8种基本类型+String 注入标签
+
+用户自定义类型
+<property name="userDAO">
+	<ref bean="userDAO"/>
+</property>
+简化：
+<property name="userDAO" ref="userDAO"/>
+~~~
+
+##### 3.2 基于p命名空间简化
+
+~~~xml
+JDK类型注入
+<bean id="person" class="xxx.Person">
+    <property name="name">
+        <value>kangkang</value>
+    </property>
+</bean>
+
+简化之后
+<bean id="" name="" p:name="suns"/>
+注意：
+	只能简化 8种基本类型+String 注入标签
+
+用户自定义类型
+<bean id="userService" class="xxx.UserServiceImpl">
+    <property name="userDAO">
+        <ref bean="userDAO"/>
+    </property>
+</bean>
+
+简化：
+<bean id="userService" class="xxx.UserServiceImpl" p:userDAO-ref="userDAO"/>
+~~~
+
