@@ -705,3 +705,92 @@ JDK类型注入
 <bean id="userService" class="xxx.UserServiceImpl" p:userDAO-ref="userDAO"/>
 ~~~
 
+### 第六章、构造注入
+
+~~~markdown
+注入：通过Spring的配置文件，为成员变量赋值
+Set注入：Spring调用Set方法，通过配置文件，为成员变量赋值
+构造注入：Spring调用构造方法，通过配置文件，为成员变量赋值
+~~~
+
+#### 1.开发步骤
+
+- 类提供有参构造方法；
+
+  ~~~java
+  public class Customer {
+      private String name;
+      private int age;
+  
+      public Customer(String name, int age) {
+          this.name = name;
+          this.age = age;
+      }
+  
+      @Override
+      public String toString() {
+          return "Customer{" +
+                  "name='" + name + '\'' +
+                  ", age=" + age +
+                  '}';
+      }
+  }
+  ~~~
+
+  
+
+- Spring的配置文件
+
+  ~~~xml
+  # constructor-arg的个数和顺序都要和构造方法中的参数一致
+  <bean id="customer" class="com.yusael.constructor.Customer">
+      <constructor-arg>
+          <value>kangkang</value>
+      </constructor-arg>
+      <constructor-arg>
+          <value>21</value>
+      </constructor-arg>
+  </bean>
+  ~~~
+
+  #### 2.构造方法重载
+
+  重载：个数不同、类型不同、顺序不同。不存在类型一致的相同构造方法，会报错的
+
+  ##### 2.1 参数个数不同时
+
+  ~~~markdown
+  通过控制<constructor-arg>标签的数量来进行区分
+  
+  如果只有一个参数的话，只需要一对  <constructor-arg> 标签： 
+  <bean id="customer" class="com.yusael.constructor.Customer">
+      <constructor-arg>
+          <value>kangkang</value>
+      </constructor-arg>
+  </bean>
+  
+  如果有两个参数的话，用两对 <constructor-arg> 标签，以此类推。
+  <bean id="customer" class="com.yusael.constructor.Customer">
+      <constructor-arg>
+          <value>kangkang</value>
+      </constructor-arg>
+      <constructor-arg>
+          <value>22</value>
+      </constructor-arg>
+  </bean>
+  ~~~
+
+  ##### 2.2构造参数个数相同时
+
+  ~~~markdown
+  通过在标签中引入 type属性 进行类型的区分 <constructor-arg type="">
+  
+  <bean id="customer" class="com.yusael.constructor.Customer">
+  	<constructor-arg type="int">
+  	    <value>20</value>
+  	</constructor-arg>
+  </bean>
+  ~~~
+
+  
+
