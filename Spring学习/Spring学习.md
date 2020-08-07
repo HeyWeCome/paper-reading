@@ -753,44 +753,91 @@ Set注入：Spring调用Set方法，通过配置文件，为成员变量赋值
   </bean>
   ~~~
 
-  #### 2.构造方法重载
+#### 2.构造方法重载
 
-  重载：个数不同、类型不同、顺序不同。不存在类型一致的相同构造方法，会报错的
+重载：个数不同、类型不同、顺序不同。不存在类型一致的相同构造方法，会报错的
 
-  ##### 2.1 参数个数不同时
+##### 2.1 参数个数不同时
 
-  ~~~markdown
-  通过控制<constructor-arg>标签的数量来进行区分
-  
-  如果只有一个参数的话，只需要一对  <constructor-arg> 标签： 
-  <bean id="customer" class="com.yusael.constructor.Customer">
-      <constructor-arg>
-          <value>kangkang</value>
-      </constructor-arg>
-  </bean>
-  
-  如果有两个参数的话，用两对 <constructor-arg> 标签，以此类推。
-  <bean id="customer" class="com.yusael.constructor.Customer">
-      <constructor-arg>
-          <value>kangkang</value>
-      </constructor-arg>
-      <constructor-arg>
-          <value>22</value>
-      </constructor-arg>
-  </bean>
-  ~~~
+~~~markdown
+通过控制<constructor-arg>标签的数量来进行区分
 
-  ##### 2.2构造参数个数相同时
+如果只有一个参数的话，只需要一对  <constructor-arg> 标签： 
+<bean id="customer" class="com.constructor.Customer">
+    <constructor-arg>
+        <value>kangkang</value>
+    </constructor-arg>
+</bean>
 
-  ~~~markdown
-  通过在标签中引入 type属性 进行类型的区分 <constructor-arg type="">
-  
-  <bean id="customer" class="com.yusael.constructor.Customer">
-  	<constructor-arg type="int">
-  	    <value>20</value>
-  	</constructor-arg>
-  </bean>
-  ~~~
+如果有两个参数的话，用两对 <constructor-arg> 标签，以此类推。
+<bean id="customer" class="com.constructor.Customer">
+    <constructor-arg>
+        <value>kangkang</value>
+    </constructor-arg>
+    <constructor-arg>
+        <value>22</value>
+    </constructor-arg>
+</bean>
+~~~
 
-  
+##### 2.2构造参数个数相同时
+
+~~~markdown
+通过在标签中引入 type属性 进行类型的区分 <constructor-arg type="">
+
+<bean id="customer" class="com.constructor.Customer">
+	<constructor-arg type="int">
+	    <value>20</value>
+	</constructor-arg>
+</bean>
+~~~
+
+#### 3.注入的总结
+
+~~~markdown
+未来的实战中，应⽤ set注入 还是 构造注入？
+
+答：set 注入更多。
+
+1. 构造注入麻烦（重载）
+2. Spring 框架底层⼤量应⽤了 set注入。
+~~~
+
+ ![注入](../pic/32133123232) 
+
+
+
+### 第七章、反转控制与依赖注入
+
+#### 1.反转(转移)控制(IOC Inverse of control)
+
+~~~markdown
+控制：对于成员变量的控制权
+不用Spring：直接在代码中，完成对于成员变量的赋值，对于成员变量赋值的控制权是由代码控制的，存在着耦合；
+使用Spring：对于成员变量复制的控制权 = Spring配置文件 + Spring工厂，解耦合；
+
+面试重点：
+所谓反转控制，即：对于成员变量赋值的控制权 由代码反转(转移)到Spring工厂和配置文件中完成。
+好处：解耦合
+底层实现：工厂设计模式
+~~~
+
+#### 2.依赖注入(DI Dependency injection)
+
+~~~markdown
+注入：通过Spring的工厂及配置文件，为对象（bean，组件）的成员变量赋值
+依赖通俗点来讲，就是我需要用到你，那我就是依赖你
+
+依赖注入：当一个类需要另一个类时，就意味着依赖，一旦出现依赖，就可以把另一个类作为本类的成员变量，最终通过Spring配置文件进行注入(赋值)。
+
+好处：解耦合
+~~~
+
+![1596764428104](../pic/1596764428104.png)
+
+
+
+
+
+
 
