@@ -837,7 +837,46 @@ Set注入：Spring调用Set方法，通过配置文件，为成员变量赋值
 
 
 
+### 第八章、Spring工厂创建复杂对象
 
+![1596959602727](../pic/1596959602727.png)
 
+#### 1.什么是复杂对象
 
+复杂对象：指的就是不能直接通过new方法创建的对象
+
+#### 2.Spring工厂创建复杂对象的3种方式
+
+##### 2.1 FactoryBean接口
+
+- 开发步骤
+
+  - 实现FactoryBean接口
+
+    ![1596960300778](../pic/1596960300778.png)
+
+  - Spring配置文件的配置
+
+    ~~~xml
+    如果class中指定的类型 是FactoryBean接口的实现类，那么通过ID值获得的是这个类所创建的复杂对象 Connection，而不是ConnectionFactoryBean
+    <bean id="conn" class="com.factorybean ConnectionFactoryBean"/>
+    ~~~
+
+- 细节
+
+  - 如果就想获得FactoryBean类型的对象，使用ctx.getBean("&conn")，这样获得的就是ConnectionFactoryBean
+
+    ![1596961188494](../pic/1596961188494.png)
+
+  - isSingleton方法
+
+    返回 true 的时候 只会创建一个复杂对象
+
+    返回 false 的时候 每一次都会创建新的对象
+
+    我们需要根据这个对象的特点，决定是返回true 还是 false
+
+##### 2.1 实例工厂
+
+##### 2.2 静态工厂
 
