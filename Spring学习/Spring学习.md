@@ -855,10 +855,37 @@ Set注入：Spring调用Set方法，通过配置文件，为成员变量赋值
 
     ![1596960300778](../pic/1596960300778.png)
 
+    ~~~java
+    public class ConnectionFactoryBean implements FactoryBean<Connection> {
+        // 用于书写创建复杂对象时的代码
+        @Override
+        public Connection getObject() throws Exception {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/spring", "root", "1234");
+            return conn;
+        }
+    
+        // 返回创建的复杂对象的类型
+        @Override
+        public Class<Connection> getObjectType() {
+            return Connection.class;
+        }
+    
+        // 是否单例
+        @Override
+        public boolean isSingleton() {
+            return false; // 每一次都创建新的复杂对象
+            // return true; // 只创建一次这种类型的复杂对象
+        }
+    }
+    
+    ~~~
+
   - Spring配置文件的配置
 
     ~~~xml
     如果class中指定的类型 是FactoryBean接口的实现类，那么通过ID值获得的是这个类所创建的复杂对象 Connection，而不是ConnectionFactoryBean
+    比如下面 class 指定的是 ConnectionFactoryBean，获得的是 Connection 对象。
     <bean id="conn" class="com.factorybean ConnectionFactoryBean"/>
     ~~~
 
@@ -874,7 +901,73 @@ Set注入：Spring调用Set方法，通过配置文件，为成员变量赋值
 
     返回 false 的时候 每一次都会创建新的对象
 
-    我们需要根据这个对象的特点，决定是返回true 还是 false
+    我们需要根据这个对象的特点，决定是返回 true(SqlSessionFactory) 还是 false (Connection)
+
+    比如连接对象Connection，每次都需要新的连接，所有返回false
+    
+  - mysql高版本连接创建时，需要制定SSL证书，解决问题的方式
+  
+    ~~~markdown
+    url = "jdbc:mysql://localhost:3306/suns?userSSL=false"
+    ~~~
+  
+  - 依赖注入的体会(DI)
+  
+    ~~~markdown
+    把 ConnectionFactoryBean 中依赖的 4 个字符串信息 ，通过配置⽂件进行注⼊。
+    ~~~
+  
+    ~~~java
+    @Getter@Setter // 提供 get set 方法
+    public class ConnectionFactoryBean implements FactoryBean<Connection> {
+    	// 将依赖的字符串信息变为成员变量, 利用配置文件进行注入。
+        private String driverClassName;
+        private String url;
+        private String username;
+        private String password;
+        @Override
+        public Connection getObject() throws Exception {
+            Class.forName(driverClassName);
+            Connection conn = DriverManager.getConnection(url, username, password);
+            return conn;
+        }
+        @Override
+        public Class<Connection> getObjectType() {
+            return Connection.class;
+        }
+        @Override
+        public boolean isSingleton() {
+      		return false;
+        }
+    }
+    ~~~
+  
+    ~~~xml
+    <!--体会依赖注入, 好处: 解耦合, 今后要修改连接数据库的信息只需要修改配置文件, 无需改动代码-->
+    <bean id="conn" class="com.yusael.factorybean.ConnectionFactoryBean">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/spring?useSSL=false"/>
+        <property name="username" value="root"/>
+        <property name="password" value="1234"/>
+    </bean>
+    ~~~
+
+- FactoryBean实现原理[简易版]
+
+   原理：**接口回调**。 
+
+  ~~~xml
+  问题：
+  1. 为什么 Spring 规定 FactoryBean 接⼝实现 getObject()？
+  2. 为什么 ctx.getBean("conn") 获得的是复杂对象 Connection ⽽非 ConnectionFactoryBean？
+  
+  Spring 内部运行流程：
+  1. 配置文件中通过 id conn 获得 ConnectionFactoryBean 类的对象 ，进而通过 instanceof 判断出是 FactoryBean 接⼝的实现类；
+  2. Spring 按照规定 getObject() —> Connection；
+  3. 返回 Connection；
+  ~~~
+
+   ![在这里插入图片描述](../pic/3231221321) 
 
 ##### 2.1 实例工厂
 
