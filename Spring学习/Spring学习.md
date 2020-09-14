@@ -969,7 +969,48 @@ Set注入：Spring调用Set方法，通过配置文件，为成员变量赋值
 
    ![在这里插入图片描述](../pic/3231221321) 
 
+- FactoryBean总结
+
+  Spring 中⽤于创建复杂对象的⼀种方式，也是 Spring **原⽣提供的**，后续 Spring 整合其他框架时会⼤量应⽤ FactoryBean 方式。 
+
 ##### 2.1 实例工厂
+
+~~~markdown
+1. 避免Spring框架的侵入
+2. 整合遗留系统 
+~~~
+
+
 
 ##### 2.2 静态工厂
 
+- 开发步骤
+
+  - StaticConnectionFactory类
+
+    ~~~java
+    public class StaticFactoryBean {
+    	// 静态方法
+        public static Connection getConnection() {
+            Connection conn = null;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/spring?useSSL=false", "root", "1234");
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
+            return conn;
+        }
+    }
+    ~~~
+
+  - 配置文件
+
+    ~~~xml
+    <!--静态工厂-->
+    <bean id="conn" class="com.yusael.factorybean.StaticFactoryBean" factory-method="getConnection"/>
+    ~~~
+
+#### 3. Spring工厂创建对象的次数
+
+![7213987](E:\Workspace\学习日常\DailyLearning\pic\7213987.png)
