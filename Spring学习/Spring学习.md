@@ -1014,3 +1014,280 @@ Set注入：Spring调用Set方法，通过配置文件，为成员变量赋值
 #### 3. Spring工厂创建对象的次数
 
 ![7213987](E:\Workspace\学习日常\DailyLearning\pic\7213987.png)
+
+
+
+
+
+### 第九章、控制Spring工厂创建对象的次数
+
+#### 1. 如何控制简单对象的创建次数
+
+配置文件中进行配置：
+
+~~~xml
+<!--控制简单对象创建次数-->
+<bean id="scope" scope="singleton" class="com.scope.Scope"/>
+
+singleton：只会创建一次简单对象，为默认值；（默认单例模式）
+prototype：每一次都会创建新的对象；
+~~~
+
+#### 2.如何控制复杂对象的创建次数
+
+~~~java
+public class xxxFactoryBean implements FactoryBean {
+	public boolean isSingleton() {
+		return true; // 只会创建⼀次
+		// return false; // 每⼀次都会创建新的
+	}
+	// 省略其余实现方法......
+}
+
+如果是实例工厂或者静态工厂，没有 isSingleton ⽅法，还是通过 scope 控制对象的创建次数控制。
+~~~
+
+#### 3.为什么要控制对象的创建次数
+
+~~~markdown
+最大的好处：节省不必要的内存浪费
+~~~
+
+- 什么样的对象只创建一次？
+
+  ~~~markdown
+  1. SqlSessionFactory：很占内存，创建一次就够了
+  2. DAO
+  3. Service
+  ~~~
+
+- 什么样的对象 每一次都要创建新的？
+
+  ~~~markdown
+  1. Connection：连接事务，不会被共用；
+  2. SqlSession：封装了连接，不能被共用；
+  3. Session
+  4. Strusts2中的Action
+  ~~~
+
+  **不能被共用，线程不安全，就需要每一次都创建新的。**
+
+### 第十章、对象的生命周期
+
+#### 1. 什么是对象的生命周期
+
+~~~markdown
+指的是一个对象创建、存活、消亡的一个完整过程
+~~~
+
+#### 2. 为什么要学习对象的生命周期
+
+~~~markdown
+由Spring来负责对象的创建、存活、销毁，了结生命周期，有利于我们使用好Spring为我们创建的对象
+~~~
+
+#### 3. 生命周期的3个阶段
+
+- 创建阶段
+
+  ~~~markdown
+  Spring工厂何时创建对象
+  ~~~
+
+  - scope=“singleton”
+
+    ~~~markdown
+    Spring工厂创建的同时，对象的创建
+    
+    注意：通过配置 <bean lazy-init="true"/> 也可以实现获取对象的同时，创建对象。
+    
+    也就是饿汉模式变成了懒汉模式
+    ~~~
+
+  - scope="prototype"
+
+    ~~~markdown
+    Spring工厂会在活区对象的同时，创建对象
+    ctx.getBean("")：这就是活区对象
+    ~~~
+
+  **由此可见，饿汉和懒汉都是单例模式**
+
+- 初始化阶段
+
+  ~~~markdown
+  Spring工厂在创建完对象后，调用对象的初始化方法，完成对应的初始化操作
+  
+  1. 初始化方法提供：程序员根据需求，提供初始化方法，最终完成初始化操作。
+  2. 初始化方法调用：Spring工厂进行调用
+  ~~~
+
+  定义初始化方法，有两种途径
+
+  - initializingBean接口
+
+    ~~~markdown
+    afterProperitesSet()
+    ~~~
+
+    ~~~java
+    public class Product implements InitializingBean {
+        public Product() {
+            System.out.println("Product.Product");
+        }
+        
+        // 这个就是初始化方法：做一些初始化操作
+        // Spring会进行调用
+        @Override
+        public void afterPropertiesSet() throws Exception{
+            sout("");
+        }
+    }
+    ~~~
+
+  - 对象中提供一个普通的方法
+
+    ~~~Java
+    public void myInit(){
+        
+    }
+    
+    如何让spring知道我提供了这个方法呢？
+        <bean id="product" class="xxx.Product" init-method="myInit"/>
+    ~~~
+
+    代码演示：
+
+    ~~~java
+    public class Product implements InitializingBean {
+        public Product() {
+            System.out.println("Product.Product");
+        }
+        
+        public void myInit(){
+        	sout("product.myInit");
+    	}
+    }
+    ~~~
+
+    配置文件：
+
+    ~~~xml
+    <bean id="product"> class="com.life.Product" init-method="myInit" />
+    ~~~
+
+  - 细节分析
+
+    1. 如果⼀个对象既实现 `InitializingBean` 同时⼜提供的 普通的初始化方法，他们的执行顺序?
+
+       回答：先执行 `InitializingBean`，再执行普通初始化方法。 两者都执行。
+
+    2. 注入一定发生在初始化操作的前面
+
+       **Spring在创建完对象之后，首先进行注入(DI)，然后再初始化(init)**
+
+    3. 什么叫做初始化操作
+
+       ~~~markdown
+       资源的初始化：数据库 IO 网络 ...
+       ~~~
+
+- 销毁阶段
+
+  ~~~markdown
+  Spring销毁对象钱，会调用对象的销毁方法，完成销毁操作
+  
+  1. Spring什么时候销毁所创建的对象？
+  	ctx.close();
+  2. 销毁方法：程序员根据自己的需求，定义销毁方法，完成销毁操作
+  	调用：Spring工厂完成调用
+  ~~~
+
+  - DisposableBean
+
+    ~~~java
+    public class Product implements DisposableBean {
+        // 程序员根据⾃⼰的需求, 定义销毁方法, 完成销毁操作
+        @Override
+        public void destroy() throws Exception {
+            System.out.println("Product.destroy");
+        }
+    }
+    
+    ~~~
+
+  - 定义一个普通的销毁方法 ，配置文件种配置 `destroy-method`
+
+    ~~~java
+    public class Product {
+    	// 程序员根据⾃⼰的需求, 定义销毁方法, 完成销毁操作
+        public void myDestory() {
+            System.out.println("Product.myDestory");
+        }
+    }
+    ~~~
+
+    ~~~xml
+    <bean id="product" class="com.life.Product" destroy-method="myDestory"/>
+    ~~~
+
+  - 细节分析
+
+    ~~~markdown
+    1. 销毁方法的操作只适用于 scope="singleton"
+    2. 什么叫做销毁操作
+       主要指的就是 资源的释放操作 io.close() connection.close();
+    ~~~
+
+    
+
+#### 4. 对象的生命周期总结
+
+~~~java
+public class Product implements InitializingBean, DisposableBean {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        System.out.println("Product.setName");
+        this.name = name;
+    }
+
+    Product() { // 创建
+        System.out.println("Product.Product");
+    }
+
+    // 程序员根据需求实现的方法, 完成初始化操作
+    public void myInit() {
+        System.out.println("Product.myInit");
+    }
+
+    // 程序员根据需求实现的方法, 完成初始化操作
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("Product.afterPropertiesSet");
+    }
+
+    public void myDestory() {
+        System.out.println("Product.myDestory");
+    }
+
+    // 程序员根据⾃⼰的需求, 定义销毁方法, 完成销毁操作
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("Product.destroy");
+    }
+}
+~~~
+
+~~~xml
+<bean id="product" class="com.life.Product" init-method="myInit" destroy-method="myDestory">
+	<property name="name" value="kangkang"/>
+</bean>
+
+~~~
+
+![1600089479799](../pic/1600089479799.png)
