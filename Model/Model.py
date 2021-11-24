@@ -1,4 +1,6 @@
+# # 基础的模型
 # import os
+#
 #
 # class Model(object):
 #     def __init__(self, n_mid, embedding_dim, hidden_size, batch_size, seq_len, flag="DNN"):
@@ -7,13 +9,13 @@
 #         self.batch_size = batch_size
 #         self.n_mid = n_mid
 #         self.neg_num = 10
-#         # with tf.name_scope('Inputs'):
-#         #     self.mid_his_batch_ph = tf.placeholder(tf.int32, [None, None], name='mid_his_batch_ph')
-#         #     self.uid_batch_ph = tf.placeholder(tf.int32, [None, ], name='uid_batch_ph')
-#         #     self.mid_batch_ph = tf.placeholder(tf.int32, [None, ], name='mid_batch_ph')
-#         #     self.mask = tf.placeholder(tf.float32, [None, None], name='mask_batch_ph')
-#         #     self.target_ph = tf.placeholder(tf.float32, [None, 2], name='target_ph')
-#         #     self.lr = tf.placeholder(tf.float64, [])
+#         with tf.name_scope('Inputs'):
+#             self.mid_his_batch_ph = tf.placeholder(tf.int32, [None, None], name='mid_his_batch_ph')
+#             self.uid_batch_ph = tf.placeholder(tf.int32, [None, ], name='uid_batch_ph')
+#             self.mid_batch_ph = tf.placeholder(tf.int32, [None, ], name='mid_batch_ph')
+#             self.mask = tf.placeholder(tf.float32, [None, None], name='mask_batch_ph')
+#             self.target_ph = tf.placeholder(tf.float32, [None, 2], name='target_ph')
+#             self.lr = tf.placeholder(tf.float64, [])
 #
 #         self.mask_length = tf.cast(tf.reduce_sum(self.mask, -1), dtype=tf.int32)
 #
