@@ -27,22 +27,12 @@ for index in users.keys():
         train_data[index] = trans_item
     index = index+1
 
-print(train_data[1].shape)
+# print(train_data[1].unsqueeze(dim=0).unsqueeze(dim=0).shape)
+temp = train_data[1].unsqueeze(dim=0).unsqueeze(dim=0)
 
-# transformer_model = nn.TransformerDecoderLayer(d_model=64, nhead=16, num_encoder_layers=12)
-# # print(transformer_model)
-# # src = torch.rand((10, 32, 64))
-# # print(src)
-# # tgt = torch.rand((10, 32, 64))
-# # print(tgt)
-# out = transformer_model(train_data[1], train_data[1])
-# print("结果", out.shape)
-
-decoder_layer = nn.TransformerDecoderLayer(d_model=64, nhead=8)
-memory = torch.rand(1, 10, 64)
-tgt = torch.rand(2, 10, 64)
-out = decoder_layer(tgt, memory)
-print(memory.shape)
-print(tgt.shape)
-print(out.shape)
+encoder_layer = nn.TransformerEncoderLayer(d_model=64, nhead=8)
+transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=6)
+out = transformer_encoder(temp)
+print(temp.reshape(-1))
+print(out.reshape(-1))
 
