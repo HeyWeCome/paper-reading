@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import torch
 from torch import nn
+from torch.nn import functional as F
 
 users = defaultdict(list)
 users[1].append([1, 2, 3, 4, 5])
@@ -35,4 +36,3 @@ transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=6)
 out = transformer_encoder(temp)
 print(temp.reshape(-1))
 print(out.reshape(-1))
-
