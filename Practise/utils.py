@@ -1,6 +1,7 @@
 import torch
 
-x = torch.tensor([1, 2, 3])
-x = x.repeat(4, 2)
-print(x)
-x.repeat(4, 2, 1).size()
+x = torch.rand(256, 20, 20)
+y = torch.rand(256, 20, 64)
+print(x.shape)
+print(y.shape)
+print((x+y).shape)
