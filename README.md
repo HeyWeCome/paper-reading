@@ -1,4 +1,5 @@
-# DailyLearning
-用于记录自己日常的学习过程。 
+### Introduction
+读论文，做记录，坚持输出。
+
  
  
