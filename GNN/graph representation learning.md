@@ -22,9 +22,9 @@
 
 在讨论图机器学习之前，有必要对 “**图数据**” 进行一个规范描述。
 
-一个图 $$G = (\mathcal{V}, \mathcal{E})$$ 表示节点 $$\mathcal{V}$$ 和节点之间边 $$\mathcal{E}$$ 构成的集合。我们将节点 $$ u \in \mathcal{V}$$ 到节点 $$v \in \mathcal{V}$$ 之间的边表示为$$(u, v) \in \mathcal{E} $$ 。 在大多数情况下，我们只考虑 *简单图*，在 *简单图* 中每个节点对之间最多只有**一条边**，节点没有自连接，并且所有的边都是无向的。 $$ (u,v) \in \mathcal{E} \leftrightarrow (v,u) \in \mathcal{E} $$。
+一个图 $G = (\mathcal{V}, \mathcal{E})$ 表示节点 $\mathcal{V}$ 和节点之间边 $\mathcal{E}$ 构成的集合。我们将节点 $$ u \in \mathcal{V}$$ 到节点 $v \in \mathcal{V}$$ 之间的边表示为$$(u, v) \in \mathcal{E} $ 。 在大多数情况下，我们只考虑 *简单图*，在 *简单图* 中每个节点对之间最多只有**一条边**，节点没有自连接，并且所有的边都是无向的。 $$ (u,v) \in \mathcal{E} \leftrightarrow (v,u) \in \mathcal{E} $$。
 
-表示图的一个便捷方式为 *邻接矩阵* $$ A \in \mathbb{R}^{|V|\times|V|}$$。如果在  $$(u,v) \in \mathcal{E}$$ ， $$ A[u, v] = 1$$，则表示 $$u$$ 和 $v$ 之间有边，否则 $$ A[u,v]=0$$。如果是无向图，那么 $A$ 便是对称的，如果是有向图，那么 $A$ 不对称。有一些图存在着 **权重边**，那么这个时候 $A$ 的值是任意的值，而不只属于 $\{0,1\}$。
+表示图的一个便捷方式为 *邻接矩阵* $ A \in \mathbb{R}^{|V|\times|V|}$。如果在  $$(u,v) \in \mathcal{E}$$ ， $ A[u, v] = 1$，则表示 $u$ 和 $v$ 之间有边，否则 $ A[u,v]=0$。如果是无向图，那么 $A$ 便是对称的，如果是有向图，那么 $A$ 不对称。有一些图存在着 **权重边**，那么这个时候 $A$ 的值是任意的值，而不只属于 $\{0,1\}$。
 
 
 
@@ -38,9 +38,9 @@
 
 #### 异质图
 
-在异质图中，节点也被赋予了**类型(types)**，这意味着我们可以将节点的集合划分为不相交的集合 $\mathcal{V} = \mathcal{V_1} \cup \, \mathcal{V_2} \, \cup \, ... \, \cup \, \mathcal{V_k} $，其中对于$\forall i \neq j $，$\mathcal{V_i} \cap \mathcal{V_j} = \emptyset$。
+在异质图中，节点也被赋予了**类型(types)**，这意味着我们可以将节点的集合划分为不相交的集合 $\mathcal{V} = \mathcal{V_1} \cup  \mathcal{V_2}  \cup  ...  \cup  \mathcal{V_k} $，其中对于$\forall i \neq j $，$\mathcal{V_i} \cap \mathcal{V_j} = \emptyset$。
 
-异质图中的边通常根据**节点类型**满足约束，最常见的是某些边**只**连接某些类型的节点的约束。例如：$(\mathcal{u},\mathcal{\tau_i,\mathcal{v}}) \in \mathcal{E} \rightarrow \mathcal{u} \in \mathcal{V_j}, \mathcal{v} \in \mathcal{V_k} \wedge j \neq k$。
+异质图中的边通常根据**节点类型**满足约束，最常见的是某些边**只**连接某些类型的节点的约束。例如：$$(\mathcal{u},\mathcal{\tau_i,\mathcal{v}}) \in \mathcal{E} \rightarrow \mathcal{u} \in \mathcal{V_j}, \mathcal{v} \in \mathcal{V_k} \wedge j \neq k$$。
 
 > 异质图，点属于不同的点集，边表示一种特定的关系。
 
